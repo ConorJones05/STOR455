@@ -31,8 +31,7 @@ AmesData1 <- select(AmesData, is.numeric)
 AmesModFull <- lm(Price ~ ., AmesData1)
 MSE <- (summary(AmesModFull)$sigma)^2
 AmesModNone <- lm(Price ~1, AmesData1)
-#step(AmesModNone, scale = MSE, scope = list(upper = AmesModFull), trace = FALSE)
-simple_model <- step(AmesModNone, scale = MSE, scope = list(upper = AmesModFull), direction = 'forward')
+simple_model <- step(AmesModNone, scale = MSE, scope = list(upper = AmesModFull), trace = FALSE)
 summary(simple_model)
 
 all <- regsubsets(Price ~., data = AmesData1, nvmax = 15)
@@ -48,9 +47,15 @@ Adjust your model (either the predictors included or data values that are used t
 ```{r}
 plot(simple_model)
 
-rstandard_data <- AmesData1[abs(rstandard(simple_model)) > 3, ]
+rstandard_data <- abs(rstandard(simple_model)) > 3
+rstudent_data <- abs(rstudent(simple_model)) > 3
+AmesData2 <- AmesData1[!rstandard_data, ]
 
-rstudent_data <- AmesData1[abs(rstudent(simple_model)) > 2, ]
+AmesModFull2 <- lm(Price ~ ., AmesData2)
+MSE2 <- (summary(AmesModFull)$sigma)^2
+AmesModNone2 <- lm(Price ~1, AmesData2)
+simple_model2 <- step(AmesModNone2, scale = MSE, scope = list(upper = AmesModFull2), trace = FALSE)
+summary(simple_model2)
 
 ```
 
