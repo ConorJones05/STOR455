@@ -34,8 +34,8 @@ AmesModNone <- lm(Price ~1, AmesData1)
 simple_model <- step(AmesModNone, scale = MSE, scope = list(upper = AmesModFull), trace = FALSE)
 summary(simple_model)
 
-all <- regsubsets(Price ~., data = AmesData1, nvmax = 15)
-print.data.frame(ShowSubsets(all))
+#all <- regsubsets(Price ~., data = AmesData1, nvmax = 15)
+#print.data.frame(ShowSubsets(all))
 
 ```
 
@@ -48,6 +48,7 @@ Adjust your model (either the predictors included or data values that are used t
 plot(simple_model)
 
 rstandard_data <- abs(rstandard(simple_model)) > 3
+sum(abs(rstandard(simple_model)) > 3)
 rstudent_data <- abs(rstudent(simple_model)) > 3
 AmesData2 <- AmesData1[!rstandard_data, ]
 
